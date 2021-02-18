@@ -1,5 +1,6 @@
 package cz.educanet.tranformations.logic;
 
+import cz.educanet.tranformations.Dimensions;
 import cz.educanet.tranformations.logic.models.Coordinate;
 
 import java.util.*;
@@ -8,9 +9,11 @@ public class ScreenManager {
 
     private Set<Coordinate> selectedPoints = new LinkedHashSet<>();
     private TriangleManager line = new TriangleManager();
-    boolean[][] myGrid = new boolean[18][24];
+    boolean[][] myGrid;
+    private Dimensions dimensions = new Dimensions();
 
     public ScreenManager(){
+        myGrid = new boolean[dimensions.getHeight()][dimensions.getWidth()];
         cleanGrid();
     }
     public void select(Coordinate coordinate) {

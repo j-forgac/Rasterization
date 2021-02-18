@@ -1,9 +1,11 @@
 package cz.educanet.tranformations.logic;
 
+import cz.educanet.tranformations.Dimensions;
 import cz.educanet.tranformations.logic.models.Coordinate;
 
 public class TriangleManager {
-	boolean[][] myGrid = new boolean[18][24];
+	Dimensions dimensions = new Dimensions();
+	boolean[][] myGrid;
 
 	int x;
 	int x1;
@@ -19,6 +21,7 @@ public class TriangleManager {
 	double argumentFunkce;
 
 	public TriangleManager(){
+		myGrid = new boolean[dimensions.getHeight()][dimensions.getWidth()];
 	}
 
 	public boolean[][] rasterizeLine(Coordinate coo1, Coordinate coo2) {

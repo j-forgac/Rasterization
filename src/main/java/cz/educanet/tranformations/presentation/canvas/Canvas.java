@@ -1,5 +1,6 @@
 package cz.educanet.tranformations.presentation.canvas;
 
+import cz.educanet.tranformations.Dimensions;
 import cz.educanet.tranformations.logic.ScreenManager;
 import cz.educanet.tranformations.logic.models.Coordinate;
 
@@ -11,8 +12,9 @@ import java.util.Set;
 
 public class Canvas extends JPanel {
 
-    private static final int SCREEN_WIDTH = 24;
-    private static final int SCREEN_HEIGHT = 18;
+    private Dimensions dimensions = new Dimensions();
+    private static int SCREEN_WIDTH;
+    private static int SCREEN_HEIGHT;
 
     private final ScreenManager screenManager = new ScreenManager();
 
@@ -20,6 +22,8 @@ public class Canvas extends JPanel {
     private int cellHeight;
 
     public Canvas() {
+        SCREEN_WIDTH = dimensions.getWidth();
+        SCREEN_HEIGHT = dimensions.getHeight();
         setBackground(Color.BLACK);
 
         addMouseListener(new CanvasMouseListener((x, y, button) -> {
