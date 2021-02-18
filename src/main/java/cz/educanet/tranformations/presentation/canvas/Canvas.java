@@ -56,6 +56,7 @@ public class Canvas extends JPanel {
                     g.setColor(Color.lightGray);
                     g.fillOval(i * cellWidth + (cellWidth / 2 - 5), j * cellHeight + (cellHeight / 2 - 5), 10, 10);
                 }
+
             }
         }
 
