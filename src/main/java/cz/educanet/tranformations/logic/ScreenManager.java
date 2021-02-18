@@ -16,8 +16,10 @@ public class ScreenManager {
     public void select(Coordinate coordinate) {
         selectedPoints.add(coordinate);
         System.out.println(selectedPoints.size());
-        if(selectedPoints.size() == 2){
+        if(selectedPoints.size() == 3){
             myGrid = line.rasterizeLine(getCoo(0), getCoo(1));
+            myGrid = line.rasterizeLine(getCoo(1), getCoo(2));
+            myGrid = line.rasterizeLine(getCoo(0), getCoo(2));
         }
     }
 
