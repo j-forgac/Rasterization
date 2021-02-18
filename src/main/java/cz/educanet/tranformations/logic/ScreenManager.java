@@ -20,6 +20,7 @@ public class ScreenManager {
             myGrid = line.rasterizeLine(getCoo(0), getCoo(1));
             myGrid = line.rasterizeLine(getCoo(1), getCoo(2));
             myGrid = line.rasterizeLine(getCoo(0), getCoo(2));
+            myGrid = line.fillTriangle(myGrid);
         }
     }
 

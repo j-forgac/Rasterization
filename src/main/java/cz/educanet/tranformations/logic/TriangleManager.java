@@ -103,4 +103,33 @@ public class TriangleManager {
 		}
 		return myGrid;
 	}
+
+	public boolean[][] fillTriangle( boolean[][] gridInput){
+		int firstTile;
+		int lastTile;
+		boolean autoFill = false;
+		for(int y = 0; y < gridInput.length; y++){
+			firstTile = -1;
+			lastTile = -1;
+			autoFill = false;
+			for(int x = 0; x < gridInput[y].length; x++){
+				if(autoFill){
+					if(x == lastTile){
+						break;
+					}
+					myGrid[y][x] = true;
+				} else if (gridInput[y][x]){
+					myGrid[y][x] = true;
+					if(firstTile > lastTile && !gridInput[y][x-1]){
+						lastTile = x;
+						x = firstTile;
+						autoFill = true;
+					} else {
+						firstTile = x;
+					}
+				}
+			}
+		}
+		return myGrid;
+	}
 }
