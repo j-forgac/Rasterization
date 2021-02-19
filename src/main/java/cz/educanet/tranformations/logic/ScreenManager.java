@@ -20,9 +20,9 @@ public class ScreenManager {
     public void select(Coordinate coordinate) {
         selectedPoints.add(coordinate);
         System.out.println(selectedPoints.size());
-        int[] col0 = {255,0,0};
-        int[] col1 = {0,102,255};
-        int[] col2 = {0,255,0};
+        Color col0 = new Color(255,0,0);
+        Color col1 = new Color(0,102,255);
+        Color col2 = new Color(0,255,0);
         if(selectedPoints.size() == 3){
             myGrid = line.rasterizeLine(getCoo(0), getCoo(1),col0, col1);
             myGrid = line.rasterizeLine(getCoo(1), getCoo(2),col1, col2);

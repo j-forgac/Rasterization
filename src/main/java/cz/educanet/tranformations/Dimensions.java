@@ -1,8 +1,8 @@
 package cz.educanet.tranformations;
 
 public class Dimensions {
-	int width = 24;
-	int height = 18;
+	int width = 36;
+	int height = 27;
 
 	public int getHeight() {
 		return height;
