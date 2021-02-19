@@ -3,26 +3,30 @@ package cz.educanet.tranformations.logic;
 import cz.educanet.tranformations.Dimensions;
 import cz.educanet.tranformations.logic.models.Coordinate;
 
+import java.awt.*;
 import java.util.*;
 
 public class ScreenManager {
 
     private Set<Coordinate> selectedPoints = new LinkedHashSet<>();
     private TriangleManager line = new TriangleManager();
-    boolean[][] myGrid;
+    public Color[][] myGrid;
     private Dimensions dimensions = new Dimensions();
 
     public ScreenManager(){
-        myGrid = new boolean[dimensions.getHeight()][dimensions.getWidth()];
+        myGrid = new Color[dimensions.getHeight()][dimensions.getWidth()];
         cleanGrid();
     }
     public void select(Coordinate coordinate) {
         selectedPoints.add(coordinate);
         System.out.println(selectedPoints.size());
+        int[] col0 = {255,0,0};
+        int[] col1 = {0,102,255};
+        int[] col2 = {0,255,0};
         if(selectedPoints.size() == 3){
-            myGrid = line.rasterizeLine(getCoo(0), getCoo(1));
-            myGrid = line.rasterizeLine(getCoo(1), getCoo(2));
-            myGrid = line.rasterizeLine(getCoo(0), getCoo(2));
+            myGrid = line.rasterizeLine(getCoo(0), getCoo(1),col0, col1);
+            myGrid = line.rasterizeLine(getCoo(1), getCoo(2),col1, col2);
+            myGrid = line.rasterizeLine(getCoo(0), getCoo(2),col0, col2);
             myGrid = line.fillTriangle(myGrid);
         }
     }
@@ -41,6 +45,14 @@ public class ScreenManager {
     }
 
     public boolean isFilledIn(Coordinate coordinate) { // TODO: Implement this
+        if(myGrid[coordinate.getY()][coordinate.getX()] != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Color getColor(Coordinate coordinate){
         return myGrid[coordinate.getY()][coordinate.getX()];
     }
 
@@ -64,13 +76,13 @@ public class ScreenManager {
     }
 
     private void cleanGrid(){
-        for(boolean[] row: myGrid){
-            Arrays.fill(row, false);
+        for(Color[] row: myGrid){
+            Arrays.fill(row, null);
         }
     }
 
-    public void setGrid(int y, int x){
-        myGrid[y][x] = true;
+    public void setGrid(int y, int x, int red, int green, int blue){
+        myGrid[y][x] = new Color(red,green,blue);
     }
 
 

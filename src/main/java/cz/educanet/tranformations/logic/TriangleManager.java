@@ -3,9 +3,11 @@ package cz.educanet.tranformations.logic;
 import cz.educanet.tranformations.Dimensions;
 import cz.educanet.tranformations.logic.models.Coordinate;
 
+import java.awt.*;
+
 public class TriangleManager {
 	Dimensions dimensions = new Dimensions();
-	boolean[][] myGrid;
+	Color[][] myGrid;
 
 	int x;
 	int x1;
@@ -20,11 +22,15 @@ public class TriangleManager {
 	double funkcniHodnota;
 	double argumentFunkce;
 
+	int interpolation;
+	int interp1;
+	int interp2;
+	int[] colCode = new int[3];
 	public TriangleManager(){
-		myGrid = new boolean[dimensions.getHeight()][dimensions.getWidth()];
+		myGrid = new Color[dimensions.getHeight()][dimensions.getWidth()];
 	}
 
-	public boolean[][] rasterizeLine(Coordinate coo1, Coordinate coo2) {
+	public Color[][] rasterizeLine(Coordinate coo1, Coordinate coo2, int[] color1, int[] color2) {
 		x1 = coo1.getX();
 		x2 = coo2.getX();
 
@@ -39,7 +45,7 @@ public class TriangleManager {
 			}
 
 			for(int y = y1; y <= y2; y++){
-				myGrid[y][x1] = true;
+				myGrid[y][x1] = new Color(241, 199, 29);
 			}
 		}else {
 			slope = ((double) y1 - y2) / (x1 - x2);
@@ -56,15 +62,25 @@ public class TriangleManager {
 				y1 = y2;
 				y2 = temp;
 
+				int[] tempColor = color1;
+				color1 = color2;
+				color2 = tempColor;
+
 			}
 			int y = y1;
+			interpolation = x2 - x1;
+			interp1 = interpolation;
+			interp2 = 0;
+
 			if (slope > 0) {
 				for (x = x1; x <= x2; x++) {
 					funkcniHodnota = slope * (x) + displacement;
 					if (funkcniHodnota - y > 0.5) {
 						y++;
 					}
-					myGrid[y][x] = true;
+					myGrid[y][x] = interpolate(color1,color2,interp1,interp2);
+					interp1--;
+					interp2++;
 				}
 			} else {
 				for (x = x1; x <= x2; x++) {
@@ -72,7 +88,9 @@ public class TriangleManager {
 					if (funkcniHodnota - y <= 0.5) {
 						y--;
 					}
-					myGrid[y + 1][x] = true;
+					myGrid[y+1][x] = interpolate(color1,color2,interp1,interp2);
+					interp1--;
+					interp2++;
 				}
 			}
 		} else {
@@ -84,30 +102,44 @@ public class TriangleManager {
 				temp = y1;
 				y1 = y2;
 				y2 = temp;
+
+				int[] tempColor = color1;
+				color1 = color2;
+				color2 = tempColor;
 			}
 			int x = x1;
+			interpolation = y2 - y1;
+			interp1 = interpolation;
+			interp2 = 0;
+
 			if (slope > 0) {
+				System.out.println("doki");
 				for (y = y1; y <= y2; y++) {
 					argumentFunkce = (y - displacement) / slope;
-					if (argumentFunkce - x > 0.5) {
+					if (argumentFunkce - x >= 0.5) {
 						x++;
 					}
-					myGrid[y][x] = true;
+					myGrid[y][x] = interpolate(color1,color2,interp1,interp2);
+					interp1--;
+					interp2++;
+					System.out.println("Cycle: " + interp2);
 				}
 			} else {
 				for (y = y1; y <= y2; y++) {
 					argumentFunkce = (y - displacement) / slope;
-					if (argumentFunkce - x <= 0.5) {
+					if (argumentFunkce - x < 0.5) {
 						x--;
 					}
-					myGrid[y][x + 1] = true;
+					myGrid[y][x+1] = interpolate(color1,color2,interp1,interp2);
+					interp1--;
+					interp2++;
 				}
 			}
 		}
 		return myGrid;
 	}
 
-	public boolean[][] fillTriangle( boolean[][] gridInput){
+	public Color[][] fillTriangle( Color[][] gridInput){
 		int firstTile;
 		int lastTile;
 		boolean autoFill = false;
@@ -115,15 +147,15 @@ public class TriangleManager {
 			firstTile = -1;
 			lastTile = -1;
 			autoFill = false;
+			System.out.println("");
 			for(int x = 0; x < gridInput[y].length; x++){
 				if(autoFill){
 					if(x == lastTile){
 						break;
 					}
-					myGrid[y][x] = true;
-				} else if (gridInput[y][x]){
-					myGrid[y][x] = true;
-					if(firstTile > lastTile && !gridInput[y][x-1]){
+					myGrid[y][x] = new Color(241, 199, 29);
+				} else if (gridInput[y][x] != null){
+					if(firstTile > lastTile && gridInput[y][x-1] == null){
 						lastTile = x;
 						x = firstTile;
 						autoFill = true;
@@ -134,5 +166,15 @@ public class TriangleManager {
 			}
 		}
 		return myGrid;
+	}
+
+	public Color interpolate(int[] col1, int[] col2, int x, int y){
+		double[] result = new double[3];
+		double amount1 = (double) x/interpolation;
+		double amount2 = (double) y/interpolation;
+		for(int i = 0; i < 3; i++){
+			result[i] = amount1*col1[i] + amount2*col2[i];
+		}
+		return new Color((int) (result[0]), (int) (result[1]), (int) (result[2]));
 	}
 }

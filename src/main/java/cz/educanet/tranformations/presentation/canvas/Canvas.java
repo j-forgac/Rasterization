@@ -49,7 +49,7 @@ public class Canvas extends JPanel {
                 Coordinate cell = new Coordinate(i, j);
 
                 if (screenManager.isFilledIn(cell)) {
-                    g.setColor(Color.orange);
+                    g.setColor(screenManager.getColor(cell));
                     g.fillRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
                 }
 
