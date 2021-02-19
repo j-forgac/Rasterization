@@ -44,8 +44,13 @@ public class TriangleManager {
 				y2 = temp;
 			}
 
+			interpolation = y2 - y1;
+			interp1 = interpolation;
+			interp2 = 0;
 			for(int y = y1; y <= y2; y++){
-				myGrid[y][x1] = new Color(241, 199, 29);
+				myGrid[y][x1] = Color.ORANGE;
+				interp1--;
+				interp2++;
 			}
 		}else {
 			slope = ((double) y1 - y2) / (x1 - x2);
