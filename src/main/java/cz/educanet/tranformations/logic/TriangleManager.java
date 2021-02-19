@@ -18,6 +18,7 @@ public class TriangleManager {
 	int y2;
 
 	double slope;
+	boolean isFunction = false;
 	double displacement;
 	double funkcniHodnota;
 	double argumentFunkce;
@@ -38,6 +39,7 @@ public class TriangleManager {
 		y2 = coo2.getY();
 
 		if (x1 == x2) {
+			isFunction = false;
 			if (y1 > y2) {
 				int temp = y1;
 				y1 = y2;
@@ -48,16 +50,17 @@ public class TriangleManager {
 			interp1 = interpolation;
 			interp2 = 0;
 			for(int y = y1; y <= y2; y++){
-				myGrid[y][x1] = Color.ORANGE;
+				myGrid[y][x1] = interpolate(color1,color2,interp1,interp2);
 				interp1--;
 				interp2++;
 			}
 		}else {
+			isFunction = true;
 			slope = ((double) y1 - y2) / (x1 - x2);
 		}
 		displacement = (double) y1 - slope * x1;
 
-		if (Math.abs(slope) <= 1) {
+		if (Math.abs(slope) <= 1 && isFunction) {
 			if (x1 > x2) {
 				int temp = x1;
 				x1 = x2;
@@ -98,7 +101,7 @@ public class TriangleManager {
 					interp2++;
 				}
 			}
-		} else {
+		} else if (isFunction){
 			if (y1 > y2) {
 				int temp = x1;
 				x1 = x2;
